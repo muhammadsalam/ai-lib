@@ -1,10 +1,12 @@
-# AI-Lib
+# @axvaich/ai-lib
 
 ## Using
 
 code you see:
 
 ```js
+import { generate } from "@axvaich/ai-lib";
+
 const command = await generate("multiple all numbers in array and return it");
 console.log(command([2, 1, 2, 3]));
 ```

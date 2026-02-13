@@ -1,8 +1,6 @@
 import Groq from 'groq-sdk';
 import 'dotenv/config'
-import fs from 'fs-extra';
-import path from 'path';
-import { extractCodeBlock, getFunctionName, loadFunction } from './utils';
+import { extractCodeBlock, generateHash, loadFunction } from './utils';
 import { store } from './storage';
 import ts from 'typescript';
 
@@ -46,7 +44,7 @@ export async function generate(prompt: string) {
 
     const content = result.choices[0]?.message?.content || '';
     const code = extractCodeBlock(content);
-    const fileName = getFunctionName(code)
+    const fileName = generateHash(prompt);
 
     const filePath = await store.createFunction(fileName, compileTs(code))
 
@@ -54,6 +52,6 @@ export async function generate(prompt: string) {
 }
 
 // (async () => {
-//     const command = await generate('перемножить все числа с массива в аргументе и вернуть результат');
-//     console.log(command([2, 1, 2, 3]))
+//     const command = await generate("выводится слово из аргумента с пробелами между каждой буквой");
+//     console.log(command("something"))
 // })()

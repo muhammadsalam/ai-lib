@@ -15,29 +15,6 @@ export function extractCodeBlock(text: string): string {
     return match[1].trim();
 }
 
-export function getFunctionName(code: string): string {
-    const source = ts.createSourceFile(
-        'temp.ts',
-        code,
-        ts.ScriptTarget.Latest,
-        true
-    );
-
-    let name = '';
-
-    source.forEachChild(node => {
-        if (ts.isFunctionDeclaration(node) && node.name) {
-            name = node.name.text;
-        }
-    });
-
-    if (!name) {
-        throw new Error('No named function found');
-    }
-
-    return name;
-}
-
 export async function loadFunction(filePath: string) {
     const module = await import(`file://${filePath}`);
     return module.default;
