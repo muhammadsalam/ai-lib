@@ -1,5 +1,7 @@
 # @axvaich/ai-lib
 
+AI-powered TypeScript function generator with strict typing and zero side effects.
+
 ## Installation
 
 ```bash
