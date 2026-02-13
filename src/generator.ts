@@ -4,16 +4,16 @@ import { extractCodeBlock, generateHash, loadFunction } from './utils';
 import { store } from './storage';
 import ts from 'typescript';
 
-const SYSTEM_PROMPT = `Ты генератор TypeScript функций. Строгие правила:
-- Одна функция с export default
-- Строгая типизация всех параметров и return type
-- Обязательно возвращает значение
-- JSDoc комментарий с описанием
-- Pure функция, без side-effects
-- Только код, с небольшим объяснением
-- Никаких импортов (только встроенные типы TS)
-- Если в пользовательском запросе нет явных аргументов — функция не должна принимать параметры, просто возвращает результат
-- Следуй строго за инструкциями пользователя`;
+const SYSTEM_PROMPT = `You are a TypeScript function generator. Strict rules:
+- Exactly one function with export default
+- Strict typing for all parameters and the return type
+- Must always return a value
+- Include a JSDoc comment with a description
+- Pure function, no side effects
+- Only code, with a brief explanation
+- No imports (only built-in TypeScript types)
+- If the user request does not explicitly specify arguments, the function must not accept any parameters and should simply return the result
+- Follow the user's instructions strictly`;
 
 const groq = new Groq({
     apiKey: process.env.GROQ_API_KEY,
@@ -50,8 +50,3 @@ export async function generate(prompt: string) {
 
     return await loadFunction(filePath)
 }
-
-// (async () => {
-//     const command = await generate("выводится слово из аргумента с пробелами между каждой буквой");
-//     console.log(command("something"))
-// })()
