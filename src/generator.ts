@@ -53,7 +53,7 @@ export async function generate(prompt: string) {
     return await loadFunction(filePath)
 }
 
-(async () => {
-    const command = await generate('перемножить все числа с массива в аргументе и вернуть результат');
-    console.log(command([2, 1, 2, 3]))
-})()
+// (async () => {
+//     const command = await generate('перемножить все числа с массива в аргументе и вернуть результат');
+//     console.log(command([2, 1, 2, 3]))
+// })()
