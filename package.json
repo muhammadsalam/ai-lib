@@ -1,0 +1,28 @@
+{
+  "name": "ai-libs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts",
+    "dev": "tsup src/index.ts --format esm --dts --watch --external typescript --external fs-extra",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^25.2.3",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.4",
+    "fs-extra": "^11.3.3",
+    "groq-sdk": "^0.37.0"
+  }
+}
