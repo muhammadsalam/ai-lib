@@ -1,5 +1,6 @@
 import crypto from 'node:crypto';
-import ts from 'typescript'
+import fs from 'fs';
+import path from 'path';
 
 export function generateHash(input: string): string {
     return crypto.createHash('sha256').update(input).digest('hex');
@@ -18,4 +19,13 @@ export function extractCodeBlock(text: string): string {
 export async function loadFunction(filePath: string) {
     const module = await import(`file://${filePath}`);
     return module.default;
+}
+
+export async function checkIsFunctionExists(fileHash: string) {
+    try {
+        await fs.promises.access(path.join(process.cwd(), 'generated', fileHash + '.js'));
+        return true;
+    } catch (error) {
+        return false;
+    }
 }

@@ -1,8 +1,9 @@
 import Groq from 'groq-sdk';
 import 'dotenv/config'
-import { extractCodeBlock, generateHash, loadFunction } from './utils';
+import { checkIsFunctionExists, extractCodeBlock, generateHash, loadFunction } from './utils';
 import { store } from './storage';
 import ts from 'typescript';
+import path from 'path';
 
 const SYSTEM_PROMPT = `You are a TypeScript function generator. Strict rules:
 - Exactly one function with export default
@@ -32,6 +33,18 @@ export function compileTs(code: string): string {
 }
 
 export async function generate(prompt: string) {
+    const hash = generateHash(prompt);
+    const fileName = hash + '.js';
+    let filePath: string;
+
+    if (await checkIsFunctionExists(hash)) {
+        filePath = path.join(process.cwd(), 'generated', fileName);
+
+        return await loadFunction(filePath);
+    }
+
+
+    console.log('загрузка нового скрипта')
     const result = await groq.chat.completions.create({
         model: 'llama-3.3-70b-versatile',
         messages: [
@@ -44,9 +57,9 @@ export async function generate(prompt: string) {
 
     const content = result.choices[0]?.message?.content || '';
     const code = extractCodeBlock(content);
-    const fileName = generateHash(prompt);
 
-    const filePath = await store.createFunction(fileName, compileTs(code))
+
+    filePath = await store.createFunction(fileName, compileTs(code))
 
     return await loadFunction(filePath)
 }
