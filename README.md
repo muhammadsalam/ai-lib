@@ -29,31 +29,12 @@ code you see:
 ```js
 import { generate } from "@axvaich/ai-lib";
 
-const command = await generate("multiple all numbers in array and return it");
-console.log(command([2, 1, 2, 3]));
-```
-
-generated code:
-
-```js
-/**
- * Перемножает все числа в массиве и возвращает результат.
- *
- * @param {number[]} numbers - Массив чисел для перемножения.
- * @returns {number} Результат перемножения всех чисел в массиве.
- */
-export default function multiplyNumbers(numbers) {
-    return numbers.reduce((acc, current) => acc * current, 1);
+async function main() {
+    const command2 = await generate("return all numbers from arguments");
+    console.log(command2(1, 2, 3, "asd", 54));
 }
-```
 
-### example 2
-
-code you see:
-
-```js
-const command2 = await generate("return all numbers from arguments");
-console.log(command2(1, 2, 3, 54));
+main(); // output [ 1, 2, 3, 54 ]
 ```
 
 generated code:
@@ -69,3 +50,41 @@ export default function getNumbers(...args) {
     return args.filter((arg) => typeof arg === "number");
 }
 ```
+
+### example 2
+
+code you see:
+
+```js
+import { generate } from "@axvaich/ai-lib";
+
+async function main() {
+    const button = await generate(
+        "function that returns HTML markup as a string with a styled button in a template literal",
+    );
+    console.log(button());
+}
+
+main();
+```
+
+generated code:
+
+```js
+/**
+ * Returns HTML markup as a string with a styled button.
+ *
+ * @returns {string} The HTML markup with a styled button.
+ */
+export default function getStyledButton() {
+    return `
+        <button style="background-color: #4CAF50; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+            Click me
+        </button>
+    `;
+}
+```
+
+## Performance
+
+Functions are cached by prompt hash. Existing functions are reused without additional API requests.
