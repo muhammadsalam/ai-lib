@@ -1,6 +1,6 @@
 {
   "name": "@axvaich/ai-lib",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "AI-powered TypeScript function generator with strict typing and zero side effects.",
   "publishConfig": {
     "access": "public"
