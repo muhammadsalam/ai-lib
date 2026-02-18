@@ -43,7 +43,6 @@ export async function generate(prompt: string) {
         return await loadFunction(filePath);
     }
 
-
     console.log('загрузка нового скрипта')
     const result = await groq.chat.completions.create({
         model: 'llama-3.3-70b-versatile',
@@ -58,8 +57,48 @@ export async function generate(prompt: string) {
     const content = result.choices[0]?.message?.content || '';
     const code = extractCodeBlock(content);
 
-
     filePath = await store.createFunction(fileName, compileTs(code))
 
     return await loadFunction(filePath)
 }
+
+// (async () => {
+//     const button = await generate("function that returns HTML markup as a string with a styled button in a template literal (w:240; h:56; fsz24; text: Auth, green color)");
+//     console.log(button())
+
+//     const command2 = await generate("return all numbers from arguments");
+//     console.log(command2(1, 2, 3, 'asd', 54))
+// })()
+
+function main() {
+    const program = ts.createProgram({
+        rootNames: [path.join(process.cwd(), '/generated/test.ts')],
+        options: {
+            module: ts.ModuleKind.NodeNext,
+            target: ts.ScriptTarget.ES2020,
+            strict: true,
+            noImplicitAny: true,
+            strictNullChecks: true,
+            exactOptionalPropertyTypes: true,
+            noUncheckedIndexedAccess: true,
+            declaration: true,
+            outDir: './generated'
+        }
+    })
+
+    const code = 'export default function getStyledButton(): { a: string } {return `<button style="width: 240px;height: 56px;font-size: 24px;background-color: #008000;color: #ffffff;border: none;border-radius: 5px;cursor: pointer;">Auth</button>`;}'
+
+    const sourceFile = ts.createSourceFile('test.ts', code, ts.ScriptTarget.ES2020)
+
+    // const diagnostic = program.getSemanticDiagnostics().concat(program.getSyntacticDiagnostics());
+
+    // if(diagnostic.length == 0) {
+    //     const emit = program.emit();
+    // }
+
+    // const diagnostics = ts.getPreEmitDiagnostics(program).concat(emit.diagnostics);
+    console.log(sourceFile);
+
+}
+
+main()
